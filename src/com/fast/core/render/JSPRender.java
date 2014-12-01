@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import javax.servlet.ServletException;
 
-
 public class JSPRender extends Render {
 
 	private static final long serialVersionUID = -1143848502997874309L;

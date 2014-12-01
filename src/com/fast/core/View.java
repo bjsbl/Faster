@@ -9,26 +9,33 @@ import com.fast.controller.BaseController;
 
 public class View {
 
-	private final Map<String, Class<? extends BaseController>> map = new HashMap<String, Class<? extends BaseController>>();
-	private final Map<String, String> viewPathMap = new HashMap<String, String>();
+	private Map<String, Object> map = new HashMap<String, Object>();
+	private Map<String, String> viewPathMap = new HashMap<String, String>();
+	private Map<String, Class> serviceMap = new HashMap<String, Class>();
 
-	public void addView(String controllerKey, Class<? extends BaseController> controllerClass, String viewPath) {
-		controllerKey = controllerKey.trim();
-		if ("".equals(controllerKey)) {
-			throw new IllegalArgumentException("The controllerKey can not be blank");
+	public void addView(String path, Class<? extends BaseController> controllerClass, String viewPath) {
+		path = path.trim();
+		if ("".equals(path)) {
+			throw new IllegalArgumentException("The path can not be blank");
 		}
 		if (controllerClass == null) {
-			throw new IllegalArgumentException("The controllerClass can not be null");
+			throw new IllegalArgumentException("The Controller can not be null");
 		}
-		if (!controllerKey.startsWith("/")) {
-			controllerKey = "/" + controllerKey;
+		if (!path.startsWith("/")) {
+			path = "/" + path;
 		}
-		if (map.containsKey(controllerKey)) {
-			throw new IllegalArgumentException("The controllerKey already exists: " + controllerKey);
+		if (map.containsKey(path)) {
+			throw new IllegalArgumentException("The path already exists: " + path);
 		}
-		map.put(controllerKey, controllerClass);
+		try {
+			map.put(path, controllerClass.newInstance());
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
 		if (viewPath == null || "".equals(viewPath.trim())) {
-			viewPath = controllerKey;
+			viewPath = path;
 		}
 		viewPath = viewPath.trim();
 		if (!viewPath.startsWith("/"))
@@ -37,10 +44,28 @@ public class View {
 		if (!viewPath.endsWith("/"))
 			viewPath = viewPath + "/";
 
-		viewPathMap.put(controllerKey, viewPath);
+		viewPathMap.put(path, viewPath);
 	}
 
-	public Set<Entry<String, Class<? extends BaseController>>> getEntrySet() {
+	public void addService(String serviceKey, Class serviceImpl) {
+		serviceKey = serviceKey.trim();
+		if ("".equals(serviceKey)) {
+			throw new IllegalArgumentException("The serviceKey can not be blank");
+		}
+		if (serviceImpl == null) {
+			throw new IllegalArgumentException("The serviceImpl can not be null");
+		}
+		if (serviceMap.containsKey(serviceKey)) {
+			throw new IllegalArgumentException("The serviceKey already exists: " + serviceKey);
+		}
+		serviceMap.put(serviceKey, serviceImpl);
+	}
+
+	public Class getServiceEntry(String packageName) {
+		return serviceMap.get(packageName);
+	}
+
+	public Set<Entry<String, Object>> getEntrySet() {
 		return map.entrySet();
 	}
 

@@ -6,12 +6,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.fast.core.aop.Interceptor;
-
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.TYPE, ElementType.METHOD })
-public @interface Before {
+@Target({ ElementType.TYPE, ElementType.FIELD })
+public @interface Resources {
 
-	Class<? extends Interceptor>[] value();
 }

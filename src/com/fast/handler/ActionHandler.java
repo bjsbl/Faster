@@ -3,14 +3,16 @@ package com.fast.handler;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.fast.annotation.Before;
 import com.fast.controller.BaseController;
 import com.fast.core.Action;
 import com.fast.core.ActionMapping;
+import com.fast.core.aop.Interceptor;
 import com.fast.core.render.Render;
 import com.fast.core.render.RenderFactory;
 import com.fast.log.Logger;
 
-public class ActionHandler extends Handler {
+public class ActionHandler {
 
 	private ActionMapping actionMapping;
 	private static final Logger log = Logger.getLogger(ActionHandler.class);
@@ -20,20 +22,26 @@ public class ActionHandler extends Handler {
 		this.actionMapping = actionMapping;
 	}
 
-	@Override
-	public void handle(String target, HttpServletRequest request, HttpServletResponse response) {
+	public boolean handle(String target, HttpServletRequest request, HttpServletResponse response) {
 		if (target.indexOf(".") != -1) {
-			return;
+			return false;
 		}
 		Action action = actionMapping.getAction(target);
 		if (action == null) {
 			String qs = request.getQueryString();
 			log.warn("404 Not Found: " + (qs == null ? target : target + "?" + qs));
 			RenderFactory.getInstance().getErrorRender().setContext(request, response).render();
-			return;
+			return true;
 		}
 		try {
-			BaseController controller = action.getControllerClass().newInstance();
+			if (action.getMethod().isAnnotationPresent(Before.class)) {
+				Before beforeIntercept = action.getMethod().getAnnotation(Before.class);
+				Class<? extends Interceptor>[] beforeInterceptClass = beforeIntercept.value();
+				for (Class<? extends Interceptor> interceptClass : beforeInterceptClass) {
+					interceptClass.newInstance().intercept(action);
+				}
+			}
+			BaseController controller = (BaseController) action.getControllerClass();
 			controller.init(request, response);
 			action.getMethod().invoke(controller, NULL_ARGS);
 			Render render = controller.getRender();
@@ -41,6 +49,6 @@ public class ActionHandler extends Handler {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return true;
 	}
-
 }

@@ -35,10 +35,11 @@ public class ActionMapping {
 	public void buildActionMapping() {
 		mapping.clear();
 		StringBuffer actionLogs = new StringBuffer();
+		actionLogs.append("\r");
 		Set<String> excludedMethodName = buildExcludedMethodName();
-		for (Entry<String, Class<? extends BaseController>> entry : views.getEntrySet()) {
-			Class<? extends BaseController> controllerClass = entry.getValue();
-			Method[] methods = controllerClass.getMethods();
+		for (Entry<String, Object> entry : views.getEntrySet()) {
+			Object controllerClass = entry.getValue();
+			Method[] methods = controllerClass.getClass().getMethods();
 			for (Method method : methods) {
 				String methodName = method.getName();
 				if (!excludedMethodName.contains(methodName) && method.getParameterTypes().length == 0) {
@@ -50,10 +51,11 @@ public class ActionMapping {
 					}
 					Action action = new Action(controllerKey, actionKey, controllerClass, method, methodName, views.getViewPath(controllerKey));
 					mapping.put(actionKey, action);
-					actionLogs.append(actionKey).append("==>>").append(controllerClass).append(" Method:").append(methodName).append("\r");
+					actionLogs.append(controllerClass).append(" > ").append(actionKey).append("\r");
 				}
 			}
 		}
+		actionLogs.append("\r");
 		LOG.info(actionLogs.toString());
 	}
 

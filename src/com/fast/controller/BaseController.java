@@ -6,6 +6,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.fast.core.ViewType;
 import com.fast.core.render.Render;
 import com.fast.core.render.RenderFactory;
 
@@ -15,11 +16,6 @@ public class BaseController {
 	private HttpServletResponse response;
 	private Render render;
 
-	public void init(HttpServletRequest request, HttpServletResponse response) {
-		this.request = request;
-		this.response = response;
-	}
-
 	public Render getRender() {
 		return render;
 	}
@@ -28,8 +24,21 @@ public class BaseController {
 		this.render = render;
 	}
 
+	public void init(HttpServletRequest request, HttpServletResponse response) {
+		this.request = request;
+		this.response = response;
+	}
+
 	public void renderJSP(String view) {
-		render = RenderFactory.getInstance().getRender(view);
+		render = RenderFactory.getInstance().getRender(view, ViewType.jsp);
+	}
+
+	public void renderJSON(String view) {
+		render = RenderFactory.getInstance().getRender(view, ViewType.json);
+	}
+
+	public void renderFile(String view) {
+		render = RenderFactory.getInstance().getRender(view, ViewType.file);
 	}
 
 	public HttpServletRequest getRequest() {

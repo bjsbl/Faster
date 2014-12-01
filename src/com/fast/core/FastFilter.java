@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fast.handler.ActionHandler;
-import com.fast.handler.Handler;
 import com.fast.log.Logger;
 import com.fast.utils.StringUtils;
 
@@ -22,7 +21,7 @@ public class FastFilter implements Filter, ServletContextListener {
 
 	private String encoding = "UTF-8";
 	private int contextPathLength;
-	private Handler handler;
+	private ActionHandler handler;
 	protected static final Logger LOG = Logger.getLogger(FastFilter.class);
 
 	@Override
@@ -40,9 +39,9 @@ public class FastFilter implements Filter, ServletContextListener {
 			target = target.substring(contextPathLength);
 		}
 		if (handler instanceof ActionHandler) {
-			handler.handle(target, request, response);
-		} else {
-			chain.doFilter(request, response);
+			if (!handler.handle(target, request, response)) {
+				chain.doFilter(request, response);
+			}
 		}
 	}
 
@@ -52,7 +51,7 @@ public class FastFilter implements Filter, ServletContextListener {
 		contextPathLength = (contextPath == null || "/".equals(contextPath) ? 0 : contextPath.length());
 		String scanPath = filterConfig.getInitParameter("componentScan");
 		if (StringUtils.isBlank(scanPath)) {
-			LOG.error("The componentScan Empty,Check Web.xml set");
+			LOG.error("Param 'componentScan' Empty,Check Web.xml set");
 			throw new ServletException();
 		} else {
 			scanPath = scanPath.replaceAll("\\.", "/");

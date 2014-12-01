@@ -1,5 +1,8 @@
 package com.fast.core.aop;
 
-public class Interceptor {
+import com.fast.core.Action;
 
+public interface Interceptor {
+
+	public void intercept(Action action);
 }

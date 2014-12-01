@@ -12,7 +12,7 @@
 		<filter-class>com.fast.core.FastFilter</filter-class>
 		<init-param>
 			<param-name>componentScan</param-name>
-			<param-value>org.app.controller</param-value>
+			<param-value>org.app</param-value>
 		</init-param>
 	</filter>
 	<filter-mapping>

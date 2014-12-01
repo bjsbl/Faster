@@ -2,30 +2,28 @@ package com.fast.core;
 
 import java.lang.reflect.Method;
 
-import com.fast.controller.BaseController;
-
 public class Action {
 
-	private Class<? extends BaseController> controllerClass;
-	private String controllerKey;
+	private Object controllerClass;
+	private String controllerPath;
 	private Method method;
 	private String methodName;
 	private String viewPath;
 
-	public Action(String controllerKey, String actionKey, Class<? extends BaseController> controllerClass, Method method, String methodName, String viewPath) {
+	public Action(String controllerPath, String actionKey, Object controllerClass, Method method, String methodName, String viewPath) {
 		this.controllerClass = controllerClass;
-		this.controllerKey = controllerKey;
+		this.controllerPath = controllerPath;
 		this.method = method;
 		this.methodName = methodName;
 		this.viewPath = viewPath;
 	}
 
-	public Class<? extends BaseController> getControllerClass() {
+	public Object getControllerClass() {
 		return controllerClass;
 	}
 
-	public String getControllerKey() {
-		return controllerKey;
+	public String getControllerPath() {
+		return controllerPath;
 	}
 
 	public Method getMethod() {
