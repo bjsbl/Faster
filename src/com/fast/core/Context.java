@@ -7,11 +7,16 @@ import java.util.List;
 import javax.servlet.ServletContext;
 
 import com.fast.annotation.Controller;
+import com.fast.annotation.Model;
 import com.fast.annotation.Service;
-import com.fast.controller.BaseController;
+import com.fast.core.base.BaseController;
+import com.fast.core.db.DBConfig;
+import com.fast.core.db.table.Table;
+import com.fast.core.db.table.TableMappings;
 import com.fast.handler.ActionHandler;
 import com.fast.log.Logger;
 import com.fast.utils.ClassSearcher;
+import com.fast.utils.StringUtils;
 
 public class Context {
 
@@ -19,7 +24,9 @@ public class Context {
 
 	private ActionMapping actionMapping;
 	private ServiceMapping serviceMapping;
+	private TableMappings tableMappings;
 	private ActionHandler handler;
+	private DBConfig config;
 	private String contextPath = "";
 	private String scanPath = "";
 
@@ -34,6 +41,7 @@ public class Context {
 	public void init(ServletContext servletContext, String path) {
 		this.contextPath = servletContext.getContextPath();
 		this.scanPath = path;
+		initTableMappings();
 		View views = initViews();
 		initActionMapping(views);
 		initServiceMapping(views);
@@ -51,8 +59,15 @@ public class Context {
 	}
 
 	public void initHandler() {
-		ActionHandler actionHandler = new ActionHandler(actionMapping);
-		handler = actionHandler;
+		handler = new ActionHandler(actionMapping);
+	}
+
+	private void initTableMappings() {
+		tableMappings = TableMappings.getInstance();
+	}
+
+	private void initConnection() {
+
 	}
 
 	private View initViews() {
@@ -82,9 +97,13 @@ public class Context {
 					} else if (ann instanceof Service) {
 						Class baseSevice = Class.forName(classFile);
 						views.addService(baseSevice.getName(), baseSevice);
+					} else if (ann instanceof Model) {
+						String modelName = StringUtils.defaultIfEmpty(((Model) ann).name(), base.getName());
+						log.info("Found " + modelName);
+						tableMappings.addTableClass(Table.getInstance().setName(modelName).setModelClass(base));
 					}
 				}
-			} catch (ClassNotFoundException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}

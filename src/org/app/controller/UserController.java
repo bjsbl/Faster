@@ -5,7 +5,7 @@ import org.app.service.UserService;
 
 import com.fast.annotation.Controller;
 import com.fast.annotation.Resources;
-import com.fast.controller.BaseController;
+import com.fast.core.base.BaseController;
 
 @Controller(path = { "/user/app" })
 public class UserController extends BaseController {
