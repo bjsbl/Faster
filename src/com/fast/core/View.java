@@ -5,7 +5,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import com.fast.controller.BaseController;
+import com.fast.core.base.BaseController;
+
 
 public class View {
 

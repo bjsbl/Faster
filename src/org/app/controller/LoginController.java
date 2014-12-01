@@ -1,10 +1,11 @@
 package org.app.controller;
 
 import org.app.aop.TestLog;
+import org.app.model.User;
 
 import com.fast.annotation.Before;
 import com.fast.annotation.Controller;
-import com.fast.controller.BaseController;
+import com.fast.core.base.BaseController;
 
 @Controller(path = { "/com/app" })
 public class LoginController extends BaseController {
@@ -17,6 +18,8 @@ public class LoginController extends BaseController {
 	}
 
 	public void main() {
-		System.out.println("==========Main===========");
+		User user = (User) getModelByRequest(User.class);
+		user.save();
+		System.out.println("=========Main============");
 	}
 }

@@ -4,10 +4,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fast.annotation.Before;
-import com.fast.controller.BaseController;
 import com.fast.core.Action;
 import com.fast.core.ActionMapping;
 import com.fast.core.aop.Interceptor;
+import com.fast.core.base.BaseController;
 import com.fast.core.render.Render;
 import com.fast.core.render.RenderFactory;
 import com.fast.log.Logger;
