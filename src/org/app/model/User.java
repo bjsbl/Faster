@@ -6,6 +6,10 @@ import com.fast.core.base.BaseModel;
 @Model(name = "cms_user")
 public class User extends BaseModel {
 
+<<<<<<< HEAD
+=======
+	private static final long serialVersionUID = -6331857939199025230L;
+>>>>>>> 759fbe3f1537220d55188f6ae27c99e6cdcc5b5d
 	private String id;
 	private String name;
 	private int orderIndex;

@@ -3,7 +3,10 @@ package com.fast.core.base;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.HashMap;
+<<<<<<< HEAD
 import java.util.List;
+=======
+>>>>>>> 759fbe3f1537220d55188f6ae27c99e6cdcc5b5d
 import java.util.Map;
 import java.util.Vector;
 
@@ -68,10 +71,17 @@ public class BaseModel implements Serializable {
 
 	}
 
+<<<<<<< HEAD
 	public List<Map<String, Object>> query() {
 		try {
 			String sql = SqlBuilder.queryByField(this, null);
 			return RecordBuilder.buildRecord(SqlRunner.executeQuery(sql));
+=======
+	public void query() {
+		try {
+			String sql = SqlBuilder.queryByField(this, null);
+			RecordBuilder.buildRecord(SqlRunner.executeQuery(sql));
+>>>>>>> 759fbe3f1537220d55188f6ae27c99e6cdcc5b5d
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
@@ -79,6 +89,9 @@ public class BaseModel implements Serializable {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+<<<<<<< HEAD
 		return null;
+=======
+>>>>>>> 759fbe3f1537220d55188f6ae27c99e6cdcc5b5d
 	}
 }

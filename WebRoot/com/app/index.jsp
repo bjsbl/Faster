@@ -15,6 +15,7 @@
 		id:<input type="text" name="id" /><br/>
 		<input type="submit" value="login" />
 	</form>
+<<<<<<< HEAD
 	<% 
 	List rsList = (List)request.getAttribute("userList");
 	Iterator ir= rsList.iterator();
@@ -27,5 +28,7 @@
 	<%
 	}
 	 %>
+=======
+>>>>>>> 759fbe3f1537220d55188f6ae27c99e6cdcc5b5d
 </body>
 </html>

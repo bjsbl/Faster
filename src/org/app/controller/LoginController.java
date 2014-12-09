@@ -21,8 +21,14 @@ public class LoginController extends BaseController {
 	}
 
 	public void main() {
+<<<<<<< HEAD
 		user = (User) getModelByRequest(User.class);
 		user.save();
 		index();
+=======
+		User user = (User) getModelByRequest(User.class);
+		user.save();
+		System.out.println("=========Main============");
+>>>>>>> 759fbe3f1537220d55188f6ae27c99e6cdcc5b5d
 	}
 }

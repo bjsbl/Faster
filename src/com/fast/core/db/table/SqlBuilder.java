@@ -1,6 +1,9 @@
 package com.fast.core.db.table;
 
+<<<<<<< HEAD
 import java.lang.reflect.Field;
+=======
+>>>>>>> 759fbe3f1537220d55188f6ae27c99e6cdcc5b5d
 import java.util.Map;
 import java.util.Vector;
 
@@ -29,11 +32,19 @@ public class SqlBuilder {
 	public static String queryByField(BaseModel model, String where) throws InstantiationException, IllegalAccessException {
 		StringBuffer sql = new StringBuffer();
 		Table table = model.getTable();
+<<<<<<< HEAD
 		Field[] columns = model.getClass().getDeclaredFields();
 		StringBuffer columNames = new StringBuffer();
 		sql.append("select ");
 		for (Field col : columns) {
 			columNames.append(col.getName()).append(",");
+=======
+		Map<String, Object> columns = model.getFieldDetail();
+		StringBuffer columNames = new StringBuffer();
+		sql.append("select ");
+		for (String col : columns.keySet()) {
+			columNames.append(col).append(",");
+>>>>>>> 759fbe3f1537220d55188f6ae27c99e6cdcc5b5d
 		}
 		sql.append(StringUtils.substringLastSuffix(columNames.toString())).append(" from ").append(table.getName());
 		if (!StringUtils.isBlank(where)) {
