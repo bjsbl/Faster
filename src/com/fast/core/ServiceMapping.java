@@ -21,8 +21,6 @@ public class ServiceMapping {
 
 	public void buildServiceMapping() {
 		mapping.clear();
-		StringBuffer actionLogs = new StringBuffer();
-		actionLogs.append("\r");
 		for (Entry<String, Object> entry : views.getEntrySet()) {
 			Object controllerClass = entry.getValue();
 			Field[] fields = controllerClass.getClass().getDeclaredFields();
@@ -40,12 +38,12 @@ public class ServiceMapping {
 					} catch (InstantiationException e) {
 						e.printStackTrace();
 					}
-					actionLogs.append(controllerClass.getClass().getPackage().getName() + " >" + field.getName() + " has inject!\r");
+					if (ApplicationConstants.DEV_MODE) {
+						LOG.info(controllerClass.getClass().getPackage().getName().toString() + "inject ");
+					}
 				}
 			}
 		}
-		actionLogs.append("\r");
-		LOG.info(actionLogs.toString());
 	}
 
 }

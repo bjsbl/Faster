@@ -26,7 +26,7 @@ public class SqlBuilder {
 		return sql.toString();
 	}
 
-	public static String queryByField(BaseModel model, String where) throws InstantiationException, IllegalAccessException {
+	public static String queryByFieldString(BaseModel model, String where) throws InstantiationException, IllegalAccessException {
 		StringBuffer sql = new StringBuffer();
 		Table table = model.getTable();
 		Field[] columns = model.getClass().getDeclaredFields();

@@ -25,6 +25,7 @@ public class ModelBuilder {
 			Object value = e.getValue()[0] != null ? e.getValue()[0] : "";
 			real.set(paraKey, value);
 		}
+		log.info(real.getFieldDetail().toString());
 		return real;
 	}
 

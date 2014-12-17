@@ -7,10 +7,12 @@ import java.util.List;
 import javax.servlet.ServletContext;
 
 import com.fast.annotation.Controller;
+import com.fast.annotation.DataScoure;
 import com.fast.annotation.Model;
 import com.fast.annotation.Service;
-import com.fast.core.base.BaseController;
+import com.fast.core.base.FastController;
 import com.fast.core.db.DBConfig;
+import com.fast.core.db.FDataSource;
 import com.fast.core.db.table.Table;
 import com.fast.core.db.table.TableMappings;
 import com.fast.handler.ActionHandler;
@@ -26,7 +28,7 @@ public class Context {
 	private ServiceMapping serviceMapping;
 	private TableMappings tableMappings;
 	private ActionHandler handler;
-	private DBConfig config;
+	private FDataSource dataSource;
 	private String contextPath = "";
 	private String scanPath = "";
 
@@ -42,10 +44,11 @@ public class Context {
 		this.contextPath = servletContext.getContextPath();
 		this.scanPath = path;
 		initTableMappings();
-		View views = initViews();
+		View views = scanClassContainer();
 		initActionMapping(views);
 		initServiceMapping(views);
 		initHandler();
+		initConnection();
 	}
 
 	private void initActionMapping(View v) {
@@ -67,10 +70,10 @@ public class Context {
 	}
 
 	private void initConnection() {
-
+		DBConfig.addDataSource(dataSource);
 	}
 
-	private View initViews() {
+	private View scanClassContainer() {
 		View views = new View();
 		List<String> controllerList = ClassSearcher.getInstance(getClassPath()).run();
 		for (String classFile : controllerList) {
@@ -79,10 +82,10 @@ public class Context {
 				Annotation[] annotations = base.getAnnotations();
 				for (Annotation ann : annotations) {
 					if (ann instanceof Controller) {
-						Class<? extends BaseController> controllerClass = (Class<? extends BaseController>) Class.forName(classFile);
+						Class<? extends FastController> controllerClass = (Class<? extends FastController>) Class.forName(classFile);
 						Controller controllerBind = (Controller) controllerClass.getAnnotation(Controller.class);
 						if (controllerBind == null) {
-							log.error(controllerClass.getName() + " extends baseController,but there no path;");
+							log.error(controllerClass.getName() + " extends FastController,but there no path;");
 							continue;
 						}
 						String[] paths = controllerBind.path();
@@ -95,12 +98,14 @@ public class Context {
 							views.addView(pathKey, controllerClass, pathKey);
 						}
 					} else if (ann instanceof Service) {
-						Class baseSevice = Class.forName(classFile);
+						Class<?> baseSevice = Class.forName(classFile);
 						views.addService(baseSevice.getName(), baseSevice);
 					} else if (ann instanceof Model) {
 						String modelName = StringUtils.defaultIfEmpty(((Model) ann).name(), base.getName());
 						log.info("Found " + modelName);
 						tableMappings.addTableClass(Table.getInstance().setName(modelName).setModelClass(base));
+					} else if (ann instanceof DataScoure) {
+						dataSource = (FDataSource) Class.forName(classFile).newInstance();
 					}
 				}
 			} catch (Exception e) {

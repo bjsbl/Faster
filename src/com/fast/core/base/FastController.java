@@ -11,7 +11,7 @@ import com.fast.core.db.table.ModelBuilder;
 import com.fast.core.render.Render;
 import com.fast.core.render.RenderFactory;
 
-public class BaseController {
+public class FastController {
 
 	private HttpServletRequest request;
 	private HttpServletResponse response;
@@ -54,12 +54,12 @@ public class BaseController {
 		return response;
 	}
 
-	public BaseController setAttr(String name, Object value) {
+	public FastController setAttr(String name, Object value) {
 		request.setAttribute(name, value);
 		return this;
 	}
 
-	public BaseController removeAttr(String name) {
+	public FastController removeAttr(String name) {
 		request.removeAttribute(name);
 		return this;
 	}
@@ -92,7 +92,7 @@ public class BaseController {
 		return toBoolean(request.getParameter(name), defaultValue);
 	}
 
-	public BaseController setCookie(Cookie cookie) {
+	public FastController setCookie(Cookie cookie) {
 		response.addCookie(cookie);
 		return this;
 	}
@@ -115,7 +115,7 @@ public class BaseController {
 		return cookie != null ? cookie.getValue() : defaultValue;
 	}
 
-	public BaseController setAttrs(Map<String, Object> attrMap) {
+	public FastController setAttrs(Map<String, Object> attrMap) {
 		for (Map.Entry<String, Object> entry : attrMap.entrySet())
 			request.setAttribute(entry.getKey(), entry.getValue());
 		return this;
@@ -123,7 +123,8 @@ public class BaseController {
 
 	public BaseModel getModelByRequest(Class<?> obj) {
 		try {
-			return ModelBuilder.generatorModel(obj, request);
+			BaseModel base = ModelBuilder.generatorModel(obj, request);
+			return base.getInstance(base);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -1,6 +1,5 @@
 package com.fast.log;
 
-
 public abstract class Logger {
 
 	private static LoggerFactory factory;
@@ -28,9 +27,7 @@ public abstract class Logger {
 		try {
 			Class.forName("org.apache.log4j.Logger");
 			Class<?> log4jLoggerFactoryClass = Class.forName("com.jfinal.log.Log4jLoggerFactory");
-			factory = (LoggerFactory) log4jLoggerFactoryClass.newInstance(); // return
-																				// new
-																				// Log4jLoggerFactory();
+			factory = (LoggerFactory) log4jLoggerFactoryClass.newInstance();
 		} catch (Exception e) {
 			factory = new JdkLoggerFactory();
 		}

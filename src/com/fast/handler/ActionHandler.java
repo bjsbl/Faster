@@ -7,7 +7,7 @@ import com.fast.annotation.Before;
 import com.fast.core.Action;
 import com.fast.core.ActionMapping;
 import com.fast.core.aop.Interceptor;
-import com.fast.core.base.BaseController;
+import com.fast.core.base.FastController;
 import com.fast.core.render.Render;
 import com.fast.core.render.RenderFactory;
 import com.fast.log.Logger;
@@ -30,7 +30,7 @@ public class ActionHandler {
 		if (action == null) {
 			String qs = request.getQueryString();
 			log.warn("404 Not Found: " + (qs == null ? target : target + "?" + qs));
-			RenderFactory.getInstance().getErrorRender().setContext(request, response).render();
+			RenderFactory.getInstance().getErrorRender(404).setContext(request, response).render();
 			return true;
 		}
 		try {
@@ -41,7 +41,7 @@ public class ActionHandler {
 					interceptClass.newInstance().intercept(action);
 				}
 			}
-			BaseController controller = (BaseController) action.getControllerClass();
+			FastController controller = (FastController) action.getControllerClass();
 			controller.init(request, response);
 			action.getMethod().invoke(controller, NULL_ARGS);
 			Render render = controller.getRender();

@@ -21,11 +21,13 @@ public class RenderFactory {
 			defaultRender = new JSONRender(view);
 		} else if (ViewType.file == type) {
 			defaultRender = new FileRender(view);
+		} else if (ViewType.captha == type) {
+			defaultRender = new CaptchaRender();
 		}
 		return defaultRender;
 	}
 
-	public Render getErrorRender() {
-		return new ErrorRender();
+	public Render getErrorRender(int errorCode) {
+		return new ErrorRender(errorCode);
 	}
 }

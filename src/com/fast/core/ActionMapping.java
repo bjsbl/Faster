@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import com.fast.core.base.BaseController;
+import com.fast.core.base.FastController;
 import com.fast.log.Logger;
 
 public class ActionMapping {
@@ -24,7 +24,7 @@ public class ActionMapping {
 
 	private Set<String> buildExcludedMethodName() {
 		Set<String> excludedMethodName = new HashSet<String>();
-		Method[] methods = BaseController.class.getMethods();
+		Method[] methods = FastController.class.getMethods();
 		for (Method m : methods) {
 			if (m.getParameterTypes().length == 0)
 				excludedMethodName.add(m.getName());
@@ -34,8 +34,6 @@ public class ActionMapping {
 
 	public void buildActionMapping() {
 		mapping.clear();
-		StringBuffer actionLogs = new StringBuffer();
-		actionLogs.append("\r");
 		Set<String> excludedMethodName = buildExcludedMethodName();
 		for (Entry<String, Object> entry : views.getEntrySet()) {
 			Object controllerClass = entry.getValue();
@@ -51,12 +49,12 @@ public class ActionMapping {
 					}
 					Action action = new Action(controllerKey, actionKey, controllerClass, method, methodName, views.getViewPath(controllerKey));
 					mapping.put(actionKey, action);
-					actionLogs.append(controllerClass).append(" > ").append(actionKey).append("\r");
+					if (ApplicationConstants.DEV_MODE) {
+						LOG.info(controllerClass + " > " + actionKey);
+					}
 				}
 			}
 		}
-		actionLogs.append("\r");
-		LOG.info(actionLogs.toString());
 	}
 
 	public Action getAction(String url) {

@@ -1,15 +1,12 @@
 package com.fast.core.base;
 
 import java.io.Serializable;
-import java.sql.SQLException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
-import com.fast.core.db.table.RecordBuilder;
-import com.fast.core.db.table.SqlBuilder;
-import com.fast.core.db.table.SqlRunner;
 import com.fast.core.db.table.Table;
 import com.fast.core.db.table.TableMappings;
 import com.fast.utils.StringUtils;
@@ -44,41 +41,26 @@ public class BaseModel implements Serializable {
 		}
 	}
 
-	public int save() {
-		try {
-			Vector<Object> obj = new Vector<Object>();
-			String sql = SqlBuilder.insert(this, obj);
-			System.out.println(sql);
-			return SqlRunner.executeUpdate(sql, obj);
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
+	public BaseModel getInstance(BaseModel param) {
+		for (String key : fieldValue.keySet()) {
+			try {
+				String methodName = StringUtils.formatSetMethodName(key);
+				Method[] method = param.getClass().getMethods();
+				for (Method tmp : method) {
+					if (tmp.getName().equals(methodName)) {
+						tmp.invoke(param, fieldValue.get(key));
+					}
+				}
+			} catch (SecurityException e) {
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
 		}
-		return -1;
-	}
-
-	public void deleteById() {
-
-	}
-
-	public void update() {
-
-	}
-
-	public List<Map<String, Object>> query() {
-		try {
-			String sql = SqlBuilder.queryByField(this, null);
-			return RecordBuilder.buildRecord(SqlRunner.executeQuery(sql));
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return null;
+		return param;
 	}
 }

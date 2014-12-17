@@ -1,12 +1,19 @@
 package com.fast.core.db;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.SQLException;
+
+import javax.sql.DataSource;
 
 public class DBConfig {
 
 	private final ThreadLocal<Connection> threadLocal = new ThreadLocal<Connection>();
 	private static DBConfig instance;
+	private static DataSource dataSource;
+
+	public static void addDataSource(FDataSource dataSource) {
+		DBConfig.dataSource = dataSource.getDataSource();
+	}
 
 	public static DBConfig getInstance() {
 		if (instance == null) {
@@ -23,10 +30,8 @@ public class DBConfig {
 		Connection conn = threadLocal.get();
 		if (conn == null) {
 			try {
-				Class.forName("com.mysql.jdbc.Driver").newInstance();
-				conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/cake?useUnicode=true&characterEncoding=UTF-8", "jxt", "jxt");
-				threadLocal.set(conn);
-			} catch (Exception e) {
+				DBConfig.dataSource.getConnection();
+			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}

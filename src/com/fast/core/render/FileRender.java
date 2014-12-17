@@ -25,7 +25,7 @@ public class FileRender extends Render {
 			file = new File(fileName);
 		}
 		if (file == null || !file.isFile()) {
-			RenderFactory.getInstance().getErrorRender().setContext(request, response).render();
+			RenderFactory.getInstance().getErrorRender(404).setContext(request, response).render();
 			return;
 		}
 		response.addHeader("Content-disposition", "attachment; filename=" + file.getName());

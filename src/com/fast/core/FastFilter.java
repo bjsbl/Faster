@@ -50,10 +50,12 @@ public class FastFilter implements Filter, ServletContextListener {
 		String contextPath = filterConfig.getServletContext().getContextPath();
 		contextPathLength = (contextPath == null || "/".equals(contextPath) ? 0 : contextPath.length());
 		String scanPath = filterConfig.getInitParameter("componentScan");
+		String devMode = filterConfig.getInitParameter("devMode");
 		if (StringUtils.isBlank(scanPath)) {
 			LOG.error("Param 'componentScan' Empty,Check Web.xml set");
 			throw new ServletException();
 		} else {
+			ApplicationConstants.DEV_MODE = Boolean.valueOf(StringUtils.defaultIfEmpty(devMode, "false"));
 			scanPath = scanPath.replaceAll("\\.", "/");
 			Context context = Context.getInstance();
 			context.init(filterConfig.getServletContext(), scanPath);

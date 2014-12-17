@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import com.fast.core.base.BaseController;
+import com.fast.core.base.FastController;
 
 
 public class View {
@@ -14,7 +14,7 @@ public class View {
 	private Map<String, String> viewPathMap = new HashMap<String, String>();
 	private Map<String, Class> serviceMap = new HashMap<String, Class>();
 
-	public void addView(String path, Class<? extends BaseController> controllerClass, String viewPath) {
+	public void addView(String path, Class<? extends FastController> controllerClass, String viewPath) {
 		path = path.trim();
 		if ("".equals(path)) {
 			throw new IllegalArgumentException("The path can not be blank");
