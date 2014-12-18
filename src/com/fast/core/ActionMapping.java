@@ -30,6 +30,12 @@ public class ActionMapping {
 			Method[] methods = controllerClass.getClass().getMethods();
 			for (Method method : methods) {
 				String methodName = method.getName();
+				/**
+				 *  待添加对{param}支持
+				 * 
+				 */
+				//Class<?>[] paramName = method.getParameterTypes();
+				
 				if (method.getDeclaringClass() == controllerClass.getClass() && method.getParameterTypes().length == 0) {
 					String actionKey = controllerKey.equals(DEFAULT) ? DEFAULT + methodName : controllerKey + DEFAULT + methodName;
 					Path sub = method.getAnnotation(Path.class);

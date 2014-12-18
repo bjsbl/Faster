@@ -15,24 +15,22 @@ Faster
   
 3.使用方法
    将fast.jar导入到libs；然后修改web.xml,如
-\<div>	
 	<p>\<filter></p>
-		<p>\<filter-name>FastFilter\</filter-name></p>
-		<p>\<filter-class>com.fast.core.FastFilter\</filter-class></p>
-		<p>\<init-param></p>
-			<p>\<param-name>componentScan\</param-name></p>
-			<p>\<param-value>org.app\</param-value></p>
-		<p>\</init-param></p>
-		<p>\<init-param></p>
-			<p>\<param-name>devMode\</param-name></p>
-			<p>\<param-value>true\</param-value></p>
-		<p>\</init-param></p>
+		<p>  \<filter-name>FastFilter\</filter-name></p>
+		<p>  \<filter-class>com.fast.core.FastFilter\</filter-class></p>
+		<p>  \<init-param></p>
+			<p>    \<param-name>componentScan\</param-name></p>
+			<p>    \<param-value>org.app\</param-value></p>
+		<p>  \</init-param></p>
+		<p>  \<init-param></p>
+			<p>    \<param-name>devMode\</param-name></p>
+			<p>    \<param-value>true\</param-value></p>
+		<p>  \</init-param></p>
 	<p>\</filter></p>
 	<p>\<filter-mapping></p>
-		<p>\<filter-name>FastFilter\</filter-name></p>
-		<p>\<url-pattern>/*\</url-pattern></p>
+		<p>  \<filter-name>FastFilter\</filter-name></p>
+		<p>  \<url-pattern>/*\</url-pattern></p>
 	<p>\</filter-mapping></p>
-\</div>	
 	
 	componentScan是项目java的路径，devMode会输出更多调试信息。
 

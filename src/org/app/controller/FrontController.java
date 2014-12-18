@@ -18,6 +18,6 @@ public class FrontController extends FastController {
 	@Path(value = "/hello")
 	public void path() {
 		log.info("path");
-		renderJSP("index.jsp");
+		renderJSON("{name:'root'}");
 	}
 }

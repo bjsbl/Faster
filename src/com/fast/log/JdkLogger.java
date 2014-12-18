@@ -51,38 +51,4 @@ public class JdkLogger extends Logger {
 	public void error(String message, Throwable t) {
 		log.logp(Level.SEVERE, clazzName, Thread.currentThread().getStackTrace()[1].getMethodName(), message, t);
 	}
-
-	/**
-	 * JdkLogger fatal is the same as the error.
-	 */
-	public void fatal(String message) {
-		log.logp(Level.SEVERE, clazzName, Thread.currentThread().getStackTrace()[1].getMethodName(), message);
-	}
-
-	/**
-	 * JdkLogger fatal is the same as the error.
-	 */
-	public void fatal(String message, Throwable t) {
-		log.logp(Level.SEVERE, clazzName, Thread.currentThread().getStackTrace()[1].getMethodName(), message, t);
-	}
-
-	public boolean isDebugEnabled() {
-		return log.isLoggable(Level.FINE);
-	}
-
-	public boolean isInfoEnabled() {
-		return log.isLoggable(Level.INFO);
-	}
-
-	public boolean isWarnEnabled() {
-		return log.isLoggable(Level.WARNING);
-	}
-
-	public boolean isErrorEnabled() {
-		return log.isLoggable(Level.SEVERE);
-	}
-
-	public boolean isFatalEnabled() {
-		return log.isLoggable(Level.SEVERE);
-	}
 }

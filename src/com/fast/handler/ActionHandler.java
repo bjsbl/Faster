@@ -12,7 +12,7 @@ import com.fast.core.render.Render;
 import com.fast.core.render.RenderFactory;
 import com.fast.log.Logger;
 
-public class ActionHandler {
+public class ActionHandler implements Handler {
 
 	private ActionMapping actionMapping;
 	private static final Logger log = Logger.getLogger(ActionHandler.class);
@@ -22,6 +22,7 @@ public class ActionHandler {
 		this.actionMapping = actionMapping;
 	}
 
+	@Override
 	public boolean handle(String target, HttpServletRequest request, HttpServletResponse response) {
 		if (target.indexOf(".") != -1) {
 			return false;

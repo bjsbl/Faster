@@ -19,6 +19,7 @@ import com.fast.core.db.FDataSource;
 import com.fast.core.db.table.Table;
 import com.fast.core.db.table.TableMappings;
 import com.fast.handler.ActionHandler;
+import com.fast.handler.AuthHandler;
 import com.fast.log.Logger;
 import com.fast.utils.ClassSearcher;
 import com.fast.utils.StringUtils;
@@ -30,7 +31,8 @@ public class Context {
 	private ActionMapping actionMapping;
 	private ServiceMapping serviceMapping;
 	private TableMappings tableMappings;
-	private ActionHandler handler;
+	private ActionHandler actionHandler;
+	private AuthHandler authHandler;
 	private FDataSource dataSource;
 	private String contextPath = "";
 	private String scanPath = "";
@@ -40,7 +42,7 @@ public class Context {
 	}
 
 	public ActionHandler getHandler() {
-		return handler;
+		return actionHandler;
 	}
 
 	public void init(ServletContext servletContext, String path) {
@@ -65,7 +67,7 @@ public class Context {
 	}
 
 	public void initHandler() {
-		handler = new ActionHandler(actionMapping);
+		actionHandler = new ActionHandler(actionMapping);
 	}
 
 	private void initTableMappings() {

@@ -41,11 +41,7 @@ public class FastService {
 			String sql = SqlBuilder.queryByFieldString(obj, null);
 			log.debug(sql);
 			return RecordBuilder.buildRecord(SqlRunner.executeQuery(conn, sql));
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;

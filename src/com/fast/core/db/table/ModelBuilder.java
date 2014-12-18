@@ -29,16 +29,16 @@ public class ModelBuilder {
 		return real;
 	}
 
-	public static Class<?> generatorRecord(Map<String, Object> value, Class<?> obj) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException,
-			InvocationTargetException {
+	public static Object generatorRecord(Map<String, Object> value, Class<?> obj) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, InstantiationException {
 		Field[] srcFields = obj.getDeclaredFields();
+		Object objClass = obj.newInstance();
 		Set<String> fields = value.keySet();
 		for (Field tmp : srcFields) {
 			if (fields.contains(tmp.getName().toLowerCase())) {
-				Method invoke = obj.getMethod(StringUtils.formatSetMethodName(tmp.getName()), java.lang.Object.class);
-				invoke.invoke(obj, value.get(tmp.getName().toLowerCase()));
+				tmp.setAccessible(true);
+				tmp.set(objClass, value.get(tmp.getName().toLowerCase()));
 			}
 		}
-		return obj;
+		return objClass;
 	}
 }
