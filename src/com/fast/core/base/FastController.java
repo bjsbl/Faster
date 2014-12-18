@@ -21,10 +21,6 @@ public class FastController {
 		return render;
 	}
 
-	public void setRender(Render render) {
-		this.render = render;
-	}
-
 	public void init(HttpServletRequest request, HttpServletResponse response) {
 		this.request = request;
 		this.response = response;

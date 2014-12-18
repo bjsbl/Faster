@@ -2,13 +2,13 @@ package com.fast.core;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
+import com.fast.annotation.Path;
 import com.fast.core.base.FastController;
 import com.fast.log.Logger;
+import com.fast.utils.StringUtils;
 
 public class ActionMapping {
 
@@ -22,27 +22,24 @@ public class ActionMapping {
 		this.views = views;
 	}
 
-	private Set<String> buildExcludedMethodName() {
-		Set<String> excludedMethodName = new HashSet<String>();
-		Method[] methods = FastController.class.getMethods();
-		for (Method m : methods) {
-			if (m.getParameterTypes().length == 0)
-				excludedMethodName.add(m.getName());
-		}
-		return excludedMethodName;
-	}
-
 	public void buildActionMapping() {
 		mapping.clear();
-		Set<String> excludedMethodName = buildExcludedMethodName();
 		for (Entry<String, Object> entry : views.getEntrySet()) {
 			Object controllerClass = entry.getValue();
+			String controllerKey = entry.getKey();
 			Method[] methods = controllerClass.getClass().getMethods();
 			for (Method method : methods) {
 				String methodName = method.getName();
-				if (!excludedMethodName.contains(methodName) && method.getParameterTypes().length == 0) {
-					String controllerKey = entry.getKey();
+				if (method.getDeclaringClass() == controllerClass.getClass() && method.getParameterTypes().length == 0) {
 					String actionKey = controllerKey.equals(DEFAULT) ? DEFAULT + methodName : controllerKey + DEFAULT + methodName;
+					Path sub = method.getAnnotation(Path.class);
+					if (sub != null) {
+						String value = sub.value();
+						if (!StringUtils.isEmpty(value)) {
+							value = value.startsWith(DEFAULT) ? value : DEFAULT + value;
+							actionKey = controllerKey.endsWith(DEFAULT) ? controllerKey.substring(0, controllerKey.length() - 1) + value : controllerKey + value;
+						}
+					}
 					if (mapping.containsKey(actionKey)) {
 						LOG.error(actionKey + " has used;");
 						continue;
