@@ -13,7 +13,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.fast.handler.ActionHandler;
+import com.fast.handler.Handler;
 import com.fast.log.Logger;
 import com.fast.utils.StringUtils;
 
@@ -21,7 +21,7 @@ public class FastFilter implements Filter, ServletContextListener {
 
 	private String encoding = "UTF-8";
 	private int contextPathLength;
-	private ActionHandler handler;
+	private Handler handler;
 	protected static final Logger LOG = Logger.getLogger(FastFilter.class);
 
 	@Override
@@ -38,10 +38,9 @@ public class FastFilter implements Filter, ServletContextListener {
 		if (contextPathLength != 0) {
 			target = target.substring(contextPathLength);
 		}
-		if (handler instanceof ActionHandler) {
-			if (!handler.handle(target, request, response)) {
-				chain.doFilter(request, response);
-			}
+		LOG.info(handler.getClass().toString() + " \t " + target);
+		if (!handler.handle(target, request, response)) {
+			chain.doFilter(request, response);
 		}
 	}
 
@@ -59,7 +58,7 @@ public class FastFilter implements Filter, ServletContextListener {
 			scanPath = scanPath.replaceAll("\\.", "/");
 			Context context = Context.getInstance();
 			context.init(filterConfig.getServletContext(), scanPath);
-			handler = context.getHandler();
+			handler = context.getHandlers();
 		}
 	}
 

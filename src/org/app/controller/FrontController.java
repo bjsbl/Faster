@@ -20,4 +20,14 @@ public class FrontController extends FastController {
 		log.info("path");
 		renderJSON("{name:'root'}");
 	}
+
+	public void login() {
+		log.info("Try to Login");
+		renderJSP("success.jsp");
+	}
+
+	public void logout() {
+		
+		renderJSP("index.jsp");
+	}
 }

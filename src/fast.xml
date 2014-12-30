@@ -1,10 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bean class="com.fast.handler.AuthHandler">
-	<property name="filterChain">
-		<value>
-			/admin = guest
-			/front/hello = guest
-			/front/user/* = guest
-		</value>
-	</property>
-</bean>
+<beans>
+<!-- 	<bean class="com.fast.handler.AuthHandler">
+		
+	</bean> -->
+	<bean class="com.fast.core.auth.AuthDefined">
+		<property name="loginActionUrl">/login</property>
+		<property name="loginUrl">/front/login.jsp</property>
+		<property name="loginSuccessUrl">/front/main.jsp</property>
+		<property name="loginFailureUrl">/front/login.jsp</property>
+		<property name="userDetails">
+			<value>
+				<!-- 角色=用户名 -->
+				admin=admin1,admin2
+				guest=guest1,guest2,admin1
+			</value>
+		</property>
+		<property name="filterChain">
+			<value>
+				<!-- 角色=URL -->
+				admin = /index 
+				admin = /hello
+				guest = /front/hello 
+				guest = /front/user/*
+				admin = login.jsp
+			</value>
+		</property>
+	</bean>
+</beans>

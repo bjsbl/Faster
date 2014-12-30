@@ -6,6 +6,10 @@ public class StringUtils {
 		return str == null || "".equals(str.trim()) ? true : false;
 	}
 
+	public static String trimAll(String str) {
+		return str.replaceAll(" ", "").replace("\t", "").replace("\n", "");
+	}
+
 	public static boolean isEmpty(Object str) {
 		return str == null ? true : false;
 	}

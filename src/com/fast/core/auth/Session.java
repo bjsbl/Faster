@@ -1,13 +1,8 @@
 package com.fast.core.auth;
 
-import java.io.Serializable;
 
-public interface Session {
+public class Session {
 
-	public Serializable getId();
-
-	public String getHost();
-
-	public void stop();
+	public static final String userName = "USER_NAME";
 
 }

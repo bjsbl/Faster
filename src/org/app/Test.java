@@ -1,7 +1,7 @@
 package org.app;
 
 import com.fast.core.auth.AuthConfig;
-import com.fast.handler.AuthHandler;
+import com.fast.core.auth.AuthDefined;
 
 public class Test {
 
@@ -11,10 +11,5 @@ public class Test {
 		// values.put("password", "123456");
 		// User user = (User) ModelBuilder.generatorRecord(values, User.class);
 		// System.out.println(user.userName);
-		// System.out.println(user.password);
-		AuthHandler handler = new AuthHandler();
-		AuthConfig.initXML();
-		AuthConfig.doIt(handler);
-		System.out.println(AuthConfig.toValues());
 	}
 }

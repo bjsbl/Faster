@@ -1,18 +1,18 @@
 package com.fast.core;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Vector;
 
 import javax.servlet.ServletContext;
 
 import com.fast.annotation.Controller;
 import com.fast.annotation.DataScoure;
 import com.fast.annotation.Model;
-import com.fast.annotation.Path;
 import com.fast.annotation.Service;
+import com.fast.core.auth.AuthConfig;
+import com.fast.core.auth.AuthDefined;
+import com.fast.core.auth.ClassPathXmlAuthConfig;
 import com.fast.core.base.FastController;
 import com.fast.core.db.DBConfig;
 import com.fast.core.db.FDataSource;
@@ -20,6 +20,7 @@ import com.fast.core.db.table.Table;
 import com.fast.core.db.table.TableMappings;
 import com.fast.handler.ActionHandler;
 import com.fast.handler.AuthHandler;
+import com.fast.handler.Handler;
 import com.fast.log.Logger;
 import com.fast.utils.ClassSearcher;
 import com.fast.utils.StringUtils;
@@ -31,8 +32,7 @@ public class Context {
 	private ActionMapping actionMapping;
 	private ServiceMapping serviceMapping;
 	private TableMappings tableMappings;
-	private ActionHandler actionHandler;
-	private AuthHandler authHandler;
+	private Handler handlers;
 	private FDataSource dataSource;
 	private String contextPath = "";
 	private String scanPath = "";
@@ -41,8 +41,8 @@ public class Context {
 		return new Context();
 	}
 
-	public ActionHandler getHandler() {
-		return actionHandler;
+	public Handler getHandlers() {
+		return handlers;
 	}
 
 	public void init(ServletContext servletContext, String path) {
@@ -67,7 +67,13 @@ public class Context {
 	}
 
 	public void initHandler() {
-		actionHandler = new ActionHandler(actionMapping);
+		ClassPathXmlAuthConfig config = ClassPathXmlAuthConfig.getInstance();
+		if (config.build()) {
+			AuthDefined authDetails = config.instanceAuthDefined();
+			handlers = new AuthHandler(actionMapping, authDetails);
+		} else {
+			handlers = new ActionHandler(actionMapping);
+		}
 	}
 
 	private void initTableMappings() {
