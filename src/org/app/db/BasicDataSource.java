@@ -10,9 +10,9 @@ public class BasicDataSource implements FDataSource {
 
 	private org.apache.commons.dbcp.BasicDataSource dataSource;
 	private String driver = "com.mysql.jdbc.Driver";;
-	private String url = "jdbc:mysql://localhost:3306/cake?characterEncoding=utf8";
-	private String user = "jxt";
-	private String pwd = "jxt";
+	private String url = "jdbc:mysql://localhost:3306/sants?characterEncoding=utf8";
+	private String user = "sants";
+	private String pwd = "123456";
 
 	@Override
 	public DataSource getDataSource() {

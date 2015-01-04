@@ -5,16 +5,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import com.fast.core.base.FastController;
-
-
 public class View {
 
 	private Map<String, Object> map = new HashMap<String, Object>();
 	private Map<String, String> viewPathMap = new HashMap<String, String>();
 	private Map<String, Class> serviceMap = new HashMap<String, Class>();
 
-	public void addView(String path, Class<? extends FastController> controllerClass, String viewPath) {
+	public void addView(String path, Class<?> controllerClass, String viewPath) {
 		path = path.trim();
 		if ("".equals(path)) {
 			throw new IllegalArgumentException("The path can not be blank");
@@ -66,6 +63,10 @@ public class View {
 		return serviceMap.get(packageName);
 	}
 
+	public Set<Entry<String, Class>> getServiceEntrySet() {
+		return serviceMap.entrySet();
+	}
+	
 	public Set<Entry<String, Object>> getEntrySet() {
 		return map.entrySet();
 	}

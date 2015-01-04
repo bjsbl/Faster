@@ -1,11 +1,11 @@
 package com.fast.core;
 
-import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.fast.annotation.Resources;
+import com.fast.annotation.Transactional;
 import com.fast.log.Logger;
 
 public class ServiceMapping {
@@ -21,26 +21,14 @@ public class ServiceMapping {
 
 	public void buildServiceMapping() {
 		mapping.clear();
-		for (Entry<String, Object> entry : views.getEntrySet()) {
-			Object controllerClass = entry.getValue();
-			Field[] fields = controllerClass.getClass().getDeclaredFields();
-			for (Field field : fields) {
-				if (field.isAnnotationPresent(Resources.class)) {
-					try {
-						field.setAccessible(true);
-						String t = field.getType().getName();
-						Class inject = views.getServiceEntry(t);
-						field.set(controllerClass, inject.newInstance());
-					} catch (IllegalArgumentException e) {
-						e.printStackTrace();
-					} catch (IllegalAccessException e) {
-						e.printStackTrace();
-					} catch (InstantiationException e) {
-						e.printStackTrace();
-					}
-					if (ApplicationConstants.DEV_MODE) {
-						LOG.info(controllerClass.getClass().getPackage().getName().toString() + "inject ");
-					}
+		for (Entry<String, Class> entry : views.getServiceEntrySet()) {
+			Class<?> serviceClass = entry.getValue();
+			Method[] methods = serviceClass.getMethods();
+			for (Method curMethod : methods) {
+				Transactional transactional = curMethod.getAnnotation(Transactional.class);
+				if (transactional != null) {
+					int level = transactional.value();
+
 				}
 			}
 		}

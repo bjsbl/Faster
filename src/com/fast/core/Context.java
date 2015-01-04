@@ -10,10 +10,9 @@ import com.fast.annotation.Controller;
 import com.fast.annotation.DataScoure;
 import com.fast.annotation.Model;
 import com.fast.annotation.Service;
-import com.fast.core.auth.AuthConfig;
 import com.fast.core.auth.AuthDefined;
 import com.fast.core.auth.ClassPathXmlAuthConfig;
-import com.fast.core.base.FastController;
+import com.fast.core.base.BaseModel;
 import com.fast.core.db.DBConfig;
 import com.fast.core.db.FDataSource;
 import com.fast.core.db.table.Table;
@@ -53,7 +52,7 @@ public class Context {
 		initActionMapping(views);
 		initServiceMapping(views);
 		initHandler();
-		initConnection();
+		initDataSource();
 	}
 
 	private void initActionMapping(View v) {
@@ -80,7 +79,7 @@ public class Context {
 		tableMappings = TableMappings.getInstance();
 	}
 
-	private void initConnection() {
+	private void initDataSource() {
 		DBConfig.addDataSource(dataSource);
 	}
 
@@ -89,34 +88,32 @@ public class Context {
 		List<String> controllerList = ClassSearcher.getInstance(getClassPath()).run();
 		for (String classFile : controllerList) {
 			try {
-				Class base = Class.forName(classFile);
+				Class<?> base = Class.forName(classFile);
 				Annotation[] annotations = base.getAnnotations();
 				for (Annotation ann : annotations) {
 					if (ann instanceof Controller) {
-						Class<? extends FastController> controllerClass = (Class<? extends FastController>) Class.forName(classFile);
-						Controller controllerBind = (Controller) controllerClass.getAnnotation(Controller.class);
+						Controller controllerBind = (Controller) base.getAnnotation(Controller.class);
 						if (controllerBind == null) {
-							log.error(controllerClass.getName() + " extends FastController,but there no path;");
+							log.error(base.getName() + " Path is Null");
 							continue;
 						}
 						String[] paths = controllerBind.path();
 						for (String pathKey : paths) {
 							pathKey = pathKey.trim();
 							if (pathKey.equals("")) {
-								log.error(controllerClass.getName() + "Path Empty is Null");
+								log.error(base.getName() + "Path is Null");
 								continue;
 							}
-							views.addView(pathKey, controllerClass, pathKey);
+							views.addView(pathKey, base, pathKey);
 						}
 					} else if (ann instanceof Service) {
-						Class<?> baseSevice = Class.forName(classFile);
-						views.addService(baseSevice.getName(), baseSevice);
+						views.addService(base.getName(), base);
 					} else if (ann instanceof Model) {
 						String modelName = StringUtils.defaultIfEmpty(((Model) ann).name(), base.getName());
 						log.info("Found " + modelName);
-						tableMappings.addTableClass(Table.getInstance().setName(modelName).setModelClass(base));
+						tableMappings.addTableClass(Table.getInstance().setName(modelName).setModelClass((Class<? extends BaseModel>) base));
 					} else if (ann instanceof DataScoure) {
-						dataSource = (FDataSource) Class.forName(classFile).newInstance();
+						dataSource = (FDataSource) base.newInstance();
 					}
 				}
 			} catch (Exception e) {

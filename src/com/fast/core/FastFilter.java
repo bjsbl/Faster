@@ -38,7 +38,6 @@ public class FastFilter implements Filter, ServletContextListener {
 		if (contextPathLength != 0) {
 			target = target.substring(contextPathLength);
 		}
-		LOG.info(handler.getClass().toString() + " \t " + target);
 		if (!handler.handle(target, request, response)) {
 			chain.doFilter(request, response);
 		}

@@ -8,7 +8,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import javax.security.auth.message.config.AuthConfig;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 

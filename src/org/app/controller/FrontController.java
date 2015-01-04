@@ -1,7 +1,10 @@
 package org.app.controller;
 
+import org.app.service.BaseService;
+
 import com.fast.annotation.Controller;
 import com.fast.annotation.Path;
+import com.fast.annotation.Resources;
 import com.fast.core.base.FastController;
 import com.fast.log.Logger;
 
@@ -9,6 +12,9 @@ import com.fast.log.Logger;
 public class FrontController extends FastController {
 
 	private Logger log = Logger.getLogger(this.getClass());
+
+	@Resources
+	private BaseService base;
 
 	public void index() {
 		log.info("/index");
@@ -18,6 +24,7 @@ public class FrontController extends FastController {
 	@Path(value = "/hello")
 	public void path() {
 		log.info("path");
+		base.doSomeThings();
 		renderJSON("{name:'root'}");
 	}
 
@@ -27,7 +34,6 @@ public class FrontController extends FastController {
 	}
 
 	public void logout() {
-		
 		renderJSP("index.jsp");
 	}
 }

@@ -1,15 +1,24 @@
 package org.app;
 
-import com.fast.core.auth.AuthConfig;
-import com.fast.core.auth.AuthDefined;
+import java.lang.reflect.Method;
 
 public class Test {
 
 	public static void main(String[] args) throws Exception {
-		// Map<String, Object> values = new HashMap<String, Object>();
-		// values.put("username", "admin");
-		// values.put("password", "123456");
-		// User user = (User) ModelBuilder.generatorRecord(values, User.class);
-		// System.out.println(user.userName);
+		// BasicDataSource db = new BasicDataSource();
+		// DataSource ds = db.getDataSource();
+		// for (int a = 0; a < 10; a++) {
+		// Connection conn = ds.getConnection();
+		// conn.setTransactionIsolation(com.mysql.jdbc.Connection.TRANSACTION_SERIALIZABLE);
+		// int level = conn.getTransactionIsolation();
+		// System.out.println("default:" + level);
+		// String sql = "select * from demo";
+		// Statement smt = conn.createStatement();
+		// ResultSet rst = smt.executeQuery(sql);
+		// ResultSetMetaData meta = rst.getMetaData();
+		// rst.close();
+		// smt.close();
+		// conn.close();
+		// }
 	}
 }

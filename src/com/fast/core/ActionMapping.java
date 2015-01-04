@@ -1,11 +1,13 @@
 package com.fast.core;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import com.fast.annotation.Path;
+import com.fast.annotation.Resources;
 import com.fast.core.base.FastController;
 import com.fast.log.Logger;
 import com.fast.utils.StringUtils;
@@ -31,11 +33,9 @@ public class ActionMapping {
 			for (Method method : methods) {
 				String methodName = method.getName();
 				/**
-				 *  待添加对{param}支持
+				 * 待添加对{param}支持 ;Class<?>[] paramName = method.getParameterTypes();
 				 * 
 				 */
-				//Class<?>[] paramName = method.getParameterTypes();
-				
 				if (method.getDeclaringClass() == controllerClass.getClass() && method.getParameterTypes().length == 0) {
 					String actionKey = controllerKey.equals(DEFAULT) ? DEFAULT + methodName : controllerKey + DEFAULT + methodName;
 					Path sub = method.getAnnotation(Path.class);
@@ -54,6 +54,23 @@ public class ActionMapping {
 					mapping.put(actionKey, action);
 					if (ApplicationConstants.DEV_MODE) {
 						LOG.info(controllerClass + " > " + actionKey);
+					}
+				}
+			}
+			Field[] fields = controllerClass.getClass().getDeclaredFields();
+			for (Field field : fields) {
+				if (field.isAnnotationPresent(Resources.class)) {
+					try {
+						field.setAccessible(true);
+						String t = field.getType().getName();
+						Class inject = views.getServiceEntry(t);
+						field.set(controllerClass, inject.newInstance());
+					} catch (Exception e) {
+						e.printStackTrace();
+						LOG.error(controllerClass.getClass().getPackage().getName().toString() + "inject Failed " + e.getMessage());
+					}
+					if (ApplicationConstants.DEV_MODE) {
+						LOG.info(controllerClass.getClass().getPackage().getName().toString() + "inject ");
 					}
 				}
 			}

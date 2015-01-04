@@ -34,6 +34,7 @@ public class AuthHandler implements Handler {
 		if (target.indexOf(".") != -1) {
 			return false;
 		}
+		log.info("target :" + target );
 		if (authDetails.loginActionUrl.equals(target)) {
 			Action action = actionMapping.getAction(target);
 			if (action == null) {
