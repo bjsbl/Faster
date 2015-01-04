@@ -17,6 +17,7 @@
 				<!-- 角色=URL -->
 				admin = /index 
 				admin = /hello
+				admin = /pic
 				guest = /front/hello 
 				guest = /front/user/*
 				admin = login.jsp

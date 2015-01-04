@@ -21,6 +21,10 @@ public class FrontController extends FastController {
 		renderJSP("index.jsp");
 	}
 
+	public void pic() {
+		renderCaptha(Math.random() + "N");
+	}
+
 	@Path(value = "/hello")
 	public void path() {
 		log.info("path");

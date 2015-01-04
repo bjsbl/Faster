@@ -14,9 +14,12 @@ public class CaptchaRender extends Render {
 
 	private static final long serialVersionUID = 5742248334206158128L;
 	private static final int WIDTH = 85, HEIGHT = 20;
-	private static final String[] strArr = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "M", "N", "P", "Q", "R", "S", "T", "U", "V", "W", "X",
-			"Y" };
-	private static String token = "";
+	private static final String[] strArr = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "M", "N", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y" };
+	private String token = "";
+
+	public CaptchaRender(String token) {
+		this.token = token;
+	}
 
 	@Override
 	public void render() {
@@ -55,17 +58,11 @@ public class CaptchaRender extends Render {
 		return sRand;
 	}
 
-	public static void addToken(String token) {
-		CaptchaRender.token = token;
-	}
-
 	private void drawGraphic(BufferedImage image) {
 		Graphics g = image.createGraphics();
 		Random random = new Random();
-		g.setColor(getRandColor(200, 250));
 		g.fillRect(0, 0, WIDTH, HEIGHT);
-		g.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		g.setColor(getRandColor(160, 200));
+		g.setColor(getRandColor(200, 250));
 		for (int i = 0; i < 155; i++) {
 			int x = random.nextInt(WIDTH);
 			int y = random.nextInt(HEIGHT);
@@ -73,7 +70,9 @@ public class CaptchaRender extends Render {
 			int yl = random.nextInt(12);
 			g.drawLine(x, y, x + xl, y + yl);
 		}
-		g.drawString(CaptchaRender.token, 20, 16);
+		g.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		g.setColor(getRandColor(160, 200));
+		g.drawString(token, 20, 16);
 		g.dispose();
 	}
 

@@ -22,7 +22,7 @@ public class RenderFactory {
 		} else if (ViewType.file == type) {
 			defaultRender = new FileRender(view);
 		} else if (ViewType.captha == type) {
-			defaultRender = new CaptchaRender();
+			defaultRender = new CaptchaRender(view);
 		}
 		return defaultRender;
 	}

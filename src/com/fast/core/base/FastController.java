@@ -38,8 +38,8 @@ public class FastController {
 		render = RenderFactory.getInstance().getRender(view, ViewType.file);
 	}
 
-	public void renderCaptha() {
-		render = RenderFactory.getInstance().getRender(null, ViewType.captha);
+	public void renderCaptha(String view) {
+		render = RenderFactory.getInstance().getRender(view, ViewType.captha);
 	}
 
 	public HttpServletRequest getRequest() {
